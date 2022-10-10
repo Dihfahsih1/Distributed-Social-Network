@@ -11,10 +11,18 @@ sig SocialNetwork {
     friends : User -> User // Friendships between users
 }
 
+
 some sig InitSN in SocialNetwork {
 }{
     #posts=0
     #friends=0
+}
+
+// constraint on friendship
+fact friendshipIsSymmetric {
+    all n : SocialNetwork, u1, u2 : User |
+        u1 -> u2 in s.friends implies
+            u2 -> u1 in s.friends
 }
 
 pred postOp[n, n' : SocialNetwork] {
