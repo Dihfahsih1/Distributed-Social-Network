@@ -1,0 +1,2 @@
+sig User {}
+sig Post {}
