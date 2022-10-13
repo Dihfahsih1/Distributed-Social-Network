@@ -1,24 +1,32 @@
-module qn2part1
 
-sig User {}
+
+
+sig User {
+    posts : set Post
+}
 sig Post {}
 
-// signature defines a set of objects
-sig SocialNetwork {
+sig DistributedSN{
     posts : User -> Post,   // The set of posts owned by each user
     friends : User -> User // Friendships between users
 }
+ 
 
-// A fact imposes a constraint that must be satisfied by every instance.
 fact friendshipIsSymmetric {
-    all n : SocialNetwork, u1, u2 : User |
+    all n : DistributedSN, u1, u2 : User |
     u1 -> u2 in n.friends implies
     u2 -> u1 in n.friends
 }
 
+// no shared posts
+fact "you can't share posts"{
+    all p: Post |
+        one u: User |
+            p in u.posts
+}
 
 // A predicate is a construct for packaging and reusing constraints.
-pred invariant[n : SocialNetwork] {
+pred invariant[n : DistributedSN] {
     // Each post is owned by at most one user
     all p : Post | lone n.posts.p
     // A user cannot be his or her own friend
@@ -27,6 +35,7 @@ pred invariant[n : SocialNetwork] {
     n.friends = ~(n.friends)
 }
 
-run generateValidSocialNetwork {
-    some n : SocialNetwork | invariant[n]
-}
+// run DistributedSN {
+//     some n : DistributedSN | invariant[n]
+// }
+run invariant for 4 but exactly 1 DistributedSN
