@@ -1,12 +1,13 @@
 module qn2part2
 
-open qn2part1
-
+//open qn2part1
+sig User {}
+sig Post {}
 sig DistributedSocialNetwork {
     // Servers where posts are stored
     servers : set Server , 
     // Friendships between users
-    friends : User -> User
+    friend_s : User -> User
 }
 sig Server {
     // Each server stores some subset of posts by different users
@@ -18,14 +19,9 @@ sig Server {
 // initial states of DSN
 some sig InitDSN in DistributedSocialNetwork {
 }{
-    #friends=0
+    #friend_s=0
     all s : servers | #s.posts = 0 and s.capacity > 0
 }
 
-// describes how local and global states are related
-pred promote[n, n' : DistributedSocialNetwork, s, s' : Server] {
-    // Pre-Condition
-    s in n.servers
-    // Post-Condition
-    n'.servers = (n.servers - s ) + s'
-}
+
+run {} for 4 but exactly 1 DistributedSocialNetwork 
